@@ -115,8 +115,6 @@ inline void CGeometry::SetBoundaries(CConfig *config) { }
 
 inline void CGeometry::ComputeWall_Distance(CConfig *config) { }
 
-inline void CGeometry::ComputeWall_DistanceOld(CConfig *config) { }
-
 inline void CGeometry::SetPositive_ZArea(CConfig *config) { }
 
 inline void CGeometry::SetPoint_Connectivity(void) { }

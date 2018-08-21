@@ -1067,6 +1067,10 @@ void su2_adtElemClass::Dist2ToElement(const unsigned long elemID,
         projectionInside = Dist2ToQuadrilateral(i0, i1, i2, i3, coor, r, s,
                                                 dist2Elem);
         if ( !projectionInside && dist2Elem == -1.0 ){
+          
+          /* Projection is inside this triangle, but the Newton Algorithm
+             did not converge. In this case, it is sufficient to find distance
+             to this triangle. */
           projectionInside = true;
           Dist2ToTriangle(i0, i1, i3, coor, dist2Elem, r, s);
         }
@@ -1083,6 +1087,10 @@ void su2_adtElemClass::Dist2ToElement(const unsigned long elemID,
         projectionInside = Dist2ToQuadrilateral(i0, i1, i2, i3, coor, r, s,
                                                 dist2Elem);
         if ( !projectionInside && dist2Elem == -1.0 ){
+
+          /* Projection is inside this triangle, but the Newton Algorithm
+             did not converge. In this case, it is sufficient to find distance
+             to this triangle. */
           projectionInside = true;
           Dist2ToTriangle(i2, i3, i1, coor, dist2Elem, r, s);
         }
