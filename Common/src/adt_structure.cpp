@@ -2533,7 +2533,8 @@ bool su2_adtElemClass::Dist2ToQuadrilateral(const unsigned long i0,
     if(fabs(dr) <= tolNewton && fabs(ds) <= tolNewton) break;
   }
 
-  /* Terminate if the Newton algorithm did not converge. */
+  /* If the Newton algorithm did not converge, set distance to -1.0
+     so that the distance is calculated to the triangle */
   if(itCount == maxIt){
     dist2Quad = -1.0;
     return false;
