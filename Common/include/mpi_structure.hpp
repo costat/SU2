@@ -43,7 +43,7 @@
 #include <map>
 #endif
 
-#include "./datatype_structure.hpp"
+#include "datatype_structure.hpp"
 #include <stdlib.h>
 
 #ifdef HAVE_MPI

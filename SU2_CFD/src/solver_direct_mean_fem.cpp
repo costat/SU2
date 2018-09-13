@@ -15263,6 +15263,15 @@ void CFEM_DG_NSSolver::ViscousBoundaryFacesBCTreatment(
   /* Compute the viscous fluxes in the integration points of the faces that
      are treated simulaneously. Make a distinction between a wall function
      treatment and a standard computation of the viscous fluxes. */
+#if defined (WM_DEBUG)
+  // Debugging output for wall-model
+  cout << "wallModel = " << wallModel << endl;
+  cout << "ind = " << ind << endl;
+  cout << "nFaceSimul = " << nFaceSimul << endl;
+  cout << "nInt = " << nFaceSimul << endl;
+  cout << "NPad = " << NPad << endl;
+  cout << "nDOFsElem = " << nDOFsElem << endl;
+#endif
   if( wallModel ) {
     WallTreatmentViscousFluxes(config, nFaceSimul, NPad, nInt, Wall_HeatFlux,
                                HeatFlux_Prescribed, Wall_Temperature,
@@ -15277,6 +15286,16 @@ void CFEM_DG_NSSolver::ViscousBoundaryFacesBCTreatment(
                                       fluxes, gradSolInt, viscFluxes,
                                       viscosityInt, kOverCvInt);
   }
+
+#if defined (WM_DEBUG)
+  // Debugging output for wall-model
+  cout << "fluxes = " << fluxes[0] << ", " << fluxes[1] << ", " << fluxes[2] << ", " << fluxes[3] << ", " << fluxes[4] << endl;
+  cout << "gradSolInt = " << gradSolInt[0] << ", " << gradSolInt[1] << ", " << gradSolInt[2] << ", " << gradSolInt[3] << ", " << gradSolInt[4] << endl;
+  cout << "viscFluxes = " << viscFluxes[0] << ", " << viscFluxes[1] << ", " << viscFluxes[2] << ", " << viscFluxes[3] << ", " << viscFluxes[4] << endl;
+  cout << "viscosityInt = " << viscosityInt[0] << endl;
+  cout << "kOverCvInt = " << kOverCvInt[0] << endl;
+#endif
+
 
   /* The remainder of the boundary condition treatment is the same for all
      types of boundary conditions, including the symmetry plane and the
@@ -15454,6 +15473,13 @@ void CFEM_DG_NSSolver::WallTreatmentViscousFluxes(
                                               Wall_HeatFlux, HeatFlux_Prescribed,
                                               Wall_Temperature, Temperature_Prescribed,
                                               tauWall, qWall, ViscosityWall, kOverCvWall);
+#if defined (WM_DEBUG)
+//      // Debugging output for wall-model
+//      cout << "tauWall = " << tauWall << endl;
+//      cout << "qWall = " << qWall << endl;
+//      cout << "ViscosityWall = " << ViscosityWall << endl;
+//      cout << "kOverCvWall = " << kOverCvWall << endl;
+#endif
 
         /* Determine the position where the viscous fluxes, viscosity and
            thermal conductivity must be stored. */

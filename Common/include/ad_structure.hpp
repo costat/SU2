@@ -37,7 +37,7 @@
 
 #pragma once
 
-#include "../include/datatype_structure.hpp"
+#include "datatype_structure.hpp"
 
 /*!
  * \namespace AD

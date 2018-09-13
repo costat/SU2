@@ -38,7 +38,7 @@
 
 #pragma once
 
-#include "./mpi_structure.hpp"
+#include "mpi_structure.hpp"
 
 #include <iostream>
 #include <cstdlib>
@@ -52,8 +52,8 @@
 #include <map>
 #include <assert.h>
 
-#include "./option_structure.hpp"
-#include "./datatype_structure.hpp"
+#include "option_structure.hpp"
+#include "datatype_structure.hpp"
 
 #ifdef HAVE_CGNS
 #include "cgnslib.h"
