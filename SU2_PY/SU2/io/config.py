@@ -183,6 +183,7 @@ class Config(ordered_bunch):
         param_dv['PARAM'] = def_dv['PARAM']
         param_dv['FFDTAG'] = def_dv['FFDTAG']
         param_dv['SIZE']   = def_dv['SIZE']
+
         param_dv['MARKER'] = def_dv['MARKER']
         
         self.update({ 'DV_VALUE_OLD'     : dv_old              ,
