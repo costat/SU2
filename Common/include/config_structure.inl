@@ -1398,6 +1398,10 @@ inline string CConfig::GetMesh_FileName(void) { return Mesh_FileName; }
 
 inline string CConfig::GetMesh_Out_FileName(void) { return Mesh_Out_FileName; }
 
+inline string CConfig::GetMesh_Target_FileName(void) { return Mesh_Target_FileName; }
+
+inline bool CConfig::GetInterpolate_Sol(void) { return Interpolate_Sol; }
+
 inline unsigned short CConfig::GetMesh_FileFormat(void) { return Mesh_FileFormat; }
 
 inline unsigned short CConfig::GetOutput_FileFormat(void) { return Output_FileFormat; }

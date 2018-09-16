@@ -1419,6 +1419,10 @@ void CConfig::SetConfig_Options(unsigned short val_iZone, unsigned short val_nZo
   addStringOption("MESH_FILENAME", Mesh_FileName, string("mesh.su2"));
   /*!\brief MESH_OUT_FILENAME \n DESCRIPTION: Mesh output file name. Used when converting, scaling, or deforming a mesh. \n DEFAULT: mesh_out.su2 \ingroup Config*/
   addStringOption("MESH_OUT_FILENAME", Mesh_Out_FileName, string("mesh_out.su2"));
+  /*!\brief MESH_TARGET_FILENAME \n DESCRIPTION: Target mesh file name. Used when interpolating onto a new mesh. \n DEFAULT: mesh_target.su2 \ingroup Config*/
+  addStringOption("MESH_TARGET_FILENAME", Mesh_Target_FileName, string("mesh_target.su2"));
+  /*!\brief INTERPOLATE_SOLUTION \n DESCRIPTION: Interpolate solution onto the target mesh. \n DEFAULT: false \ingroup Config*/
+  addBoolOption("INTERPOLATE_SOLUTION", Interpolate_Sol, false);
 
   /*!\brief CONV_FILENAME \n DESCRIPTION: Output file convergence history (w/o extension) \n DEFAULT: history \ingroup Config*/
   addStringOption("CONV_FILENAME", Conv_FileName, string("history"));

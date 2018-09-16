@@ -694,6 +694,7 @@ private:
   nRefOriginMoment_Z;           /*!< \brief Number of Z-coordinate moment computation origins. */
   string Mesh_FileName,			/*!< \brief Mesh input file. */
   Mesh_Out_FileName,				/*!< \brief Mesh output file. */
+  Mesh_Target_FileName,                /*!< \brief Target mesh file. */
   Solution_FlowFileName,			/*!< \brief Flow solution input file. */
   Solution_LinFileName,			/*!< \brief Linearized flow solution input file. */
   Solution_AdjFileName,			/*!< \brief Adjoint solution input file for drag functional. */
@@ -740,6 +741,7 @@ private:
   Wrt_Performance,            /*!< \brief Write the performance summary at the end of a calculation.  */
   Wrt_InletFile,                   /*!< \brief Write a template inlet profile file */
   Wrt_Slice,                   /*!< \brief Write 1D slice of a 2D cartesian solution */
+  Interpolate_Sol,           /*!< \brief Interpolate solution onto target mesh */
   Plot_Section_Forces;       /*!< \brief Write sectional forces for specified markers. */
   unsigned short Console_Output_Verb,  /*!< \brief Level of verbosity for console output */
   Kind_Average;        /*!< \brief Particular average for the marker analyze. */
@@ -5028,6 +5030,18 @@ public:
    * \return File name of the output grid.
    */
   string GetMesh_Out_FileName(void);
+    
+  /*!
+   * \brief Get name of the target grid, this parameter is important for solution interpolation.
+   * \return File name of the target grid.
+   */
+  string GetMesh_Target_FileName(void);
+    
+  /*!
+   * \brief Whether to interpolate solution.
+   * \return <code>TRUE</code> or <code>FALSE</code>  depending if we are interpolating the solution.
+   */
+   bool GetInterpolate_Sol(void);
   
   /*!
    * \brief Get the name of the file with the solution of the flow problem.
