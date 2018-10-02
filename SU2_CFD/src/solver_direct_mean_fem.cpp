@@ -15263,15 +15263,6 @@ void CFEM_DG_NSSolver::ViscousBoundaryFacesBCTreatment(
   /* Compute the viscous fluxes in the integration points of the faces that
      are treated simulaneously. Make a distinction between a wall function
      treatment and a standard computation of the viscous fluxes. */
-#if defined (WM_DEBUG)
-  // Debugging output for wall-model
-  cout << "wallModel = " << wallModel << endl;
-  cout << "ind = " << ind << endl;
-  cout << "nFaceSimul = " << nFaceSimul << endl;
-  cout << "nInt = " << nFaceSimul << endl;
-  cout << "NPad = " << NPad << endl;
-  cout << "nDOFsElem = " << nDOFsElem << endl;
-#endif
   if( wallModel ) {
     WallTreatmentViscousFluxes(config, nFaceSimul, NPad, nInt, Wall_HeatFlux,
                                HeatFlux_Prescribed, Wall_Temperature,
@@ -15289,11 +15280,21 @@ void CFEM_DG_NSSolver::ViscousBoundaryFacesBCTreatment(
 
 #if defined (WM_DEBUG)
   // Debugging output for wall-model
-  cout << "fluxes = " << fluxes[0] << ", " << fluxes[1] << ", " << fluxes[2] << ", " << fluxes[3] << ", " << fluxes[4] << endl;
-  cout << "gradSolInt = " << gradSolInt[0] << ", " << gradSolInt[1] << ", " << gradSolInt[2] << ", " << gradSolInt[3] << ", " << gradSolInt[4] << endl;
-  cout << "viscFluxes = " << viscFluxes[0] << ", " << viscFluxes[1] << ", " << viscFluxes[2] << ", " << viscFluxes[3] << ", " << viscFluxes[4] << endl;
+  cout << "wallModel = " << wallModel << endl;
+  cout << "ind = " << ind << endl;
+  cout << "nFaceSimul = " << nFaceSimul << endl;
+  cout << "nInt = " << nFaceSimul << endl;
+  cout << "NPad = " << NPad << endl;
+  cout << "nDOFsElem = " << nDOFsElem << endl;
   cout << "viscosityInt = " << viscosityInt[0] << endl;
   cout << "kOverCvInt = " << kOverCvInt[0] << endl;
+  cout << "fluxes, gradSolInt, viscFluxes" << endl;
+  for( unsigned short debug_i=0; debug_i<5; debug_i++){
+    cout << fluxes[debug_i] << ", ";
+    cout << gradSolInt[debug_i] << ", ";
+    cout << viscFluxes[debug_i];
+    cout << endl;
+  }
 #endif
 
 

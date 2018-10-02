@@ -167,11 +167,7 @@ void CWallModel1DEQ::WallShearStressAndHeatFlux(const su2double rhoExchange,
       initCondExists = true;
     }
 
-//    // Debugging output
-//    for(unsigned short i=0; i<numPoints; i++){
-//      cout << u[i] << ", ";
-//    }
-//    cout << endl;
+
 
     /*--- Solve the differential equation
      * d/dy[ (mu + mu_turb) * du/dy) = 0
@@ -206,6 +202,29 @@ void CWallModel1DEQ::WallShearStressAndHeatFlux(const su2double rhoExchange,
     diagonal[numPoints-1] = 1.0;
     rhs[numPoints-1] = velExchange;
 
+#if defined (WM_DEBUG)
+      // Debugging output
+      cout << "BEFORE MOMENTUM SOLVE" << endl;
+      if(Temperature_Prescribed == true){
+	  cout << "Wall Temperature Prescribed = " << Wall_Temperature << endl;
+      }
+      else if(HeatFlux_Prescribed == true){
+	  cout << "Prescribed Heat Flux = " << Wall_HeatFlux << endl;
+      }
+      cout << "y, u, T, mu, muTurb, rho, diagonal, rhs" << endl;
+      for(unsigned short i=0; i<numPoints; i++){
+        cout << y[i] << ", ";
+        cout << u[i] << ", ";
+        cout << T[i] << ", ";
+        cout << mu[i] << ", ";
+        cout << muTurb[i] << ", ";
+        cout << rho[i] << ", ";
+        cout << diagonal[i] << ", ";
+        cout << rhs[i] << ", ";
+        cout << endl;
+      }
+#endif
+
     // Solve the matrix problem to get the velocity field
     //********LAPACK CALL*******
 #if defined (HAVE_LAPACK) || defined(HAVE_MKL)
@@ -214,8 +233,30 @@ void CWallModel1DEQ::WallShearStressAndHeatFlux(const su2double rhoExchange,
     SU2_MPI::Error("Not compiled with LAPACK support", CURRENT_FUNCTION);
 #endif
 
-    u = rhs;
+#if defined (WM_DEBUG)
+      // Debugging output
+      cout << "AFTER MOMENTUM SOLVE" << endl;
+      if(Temperature_Prescribed == true){
+	  cout << "Wall Temperature Prescribed = " << Wall_Temperature << endl;
+      }
+      else if(HeatFlux_Prescribed == true){
+	  cout << "Prescribed Heat Flux = " << Wall_HeatFlux << endl;
+      }
+      cout << "y, u, T, mu, muTurb, rho, diagonal, rhs" << endl;
+      for(unsigned short i=0; i<numPoints; i++){
+        cout << y[i] << ", ";
+        cout << u[i] << ", ";
+        cout << T[i] << ", ";
+        cout << mu[i] << ", ";
+        cout << muTurb[i] << ", ";
+        cout << rho[i] << ", ";
+        cout << diagonal[i] << ", ";
+        cout << rhs[i] << ", ";
+        cout << endl;
+      }
+#endif
 
+    u = rhs;
 
     lower.assign(numPoints-1,0.0);
     upper.assign(numPoints-1,0.0);
@@ -237,7 +278,8 @@ void CWallModel1DEQ::WallShearStressAndHeatFlux(const su2double rhoExchange,
       su2double g = f_prime/f;
 
       lower[i-1] = (1/(dy_minus*dy_plus) - g/(dy_minus+dy_plus));
-      upper[i] = (1/(dy_plus*dy_plus) + g/(dy_minus+dy_plus));
+      upper[i] = (1/(dy_minus*dy_plus) + g/(dy_minus+dy_plus));
+      //upper[i] = (1/(dy_plus*dy_plus) + g/(dy_minus+dy_plus));
       diagonal[i] = -2.0/(dy_minus*dy_plus);
 
       su2double u_prime = (u[i+1] - u[i-1])/(dy_minus+dy_plus);
@@ -265,8 +307,8 @@ void CWallModel1DEQ::WallShearStressAndHeatFlux(const su2double rhoExchange,
       // Heat flux
       su2double f_zero = c_p * (mu[0]/Pr_lam + muTurb[0]/Pr_turb);
       diagonal[0] = -f_zero/(y[1]-y[0]);
-      su2double f_one = c_p * (mu[1]/Pr_lam + muTurb[1]/Pr_turb);
-      upper[0] = f_one/(y[1]-y[0]);
+      //su2double f_one = c_p * (mu[1]/Pr_lam + muTurb[1]/Pr_turb);
+      upper[0] = f_zero/(y[1]-y[0]);
       rhs[0] = Wall_HeatFlux;
 
       // Temperature specified by exchange
@@ -274,12 +316,58 @@ void CWallModel1DEQ::WallShearStressAndHeatFlux(const su2double rhoExchange,
       rhs[numPoints-1] = tExchange;
     }
 
+#if defined (WM_DEBUG)
+      // Debugging output
+      cout << "BEFORE ENERGY SOLVE" << endl;
+      if(Temperature_Prescribed == true){
+	  cout << "Wall Temperature Prescribed = " << Wall_Temperature << endl;
+      }
+      else if(HeatFlux_Prescribed == true){
+	  cout << "Prescribed Heat Flux = " << Wall_HeatFlux << endl;
+      }
+      cout << "y, u, T, mu, muTurb, rho, diagonal, rhs" << endl;
+      for(unsigned short i=0; i<numPoints; i++){
+        cout << y[i] << ", ";
+        cout << u[i] << ", ";
+        cout << T[i] << ", ";
+        cout << mu[i] << ", ";
+        cout << muTurb[i] << ", ";
+        cout << rho[i] << ", ";
+        cout << diagonal[i] << ", ";
+        cout << rhs[i] << ", ";
+        cout << endl;
+      }
+#endif
+
     // Solve the matrix problem to get the temperature field
     // *******LAPACK CALL********
 #if defined (HAVE_LAPACK) || defined(HAVE_MKL)
     LAPACKE_dgtsv(LAPACK_COL_MAJOR,numPoints,1,lower.data(),diagonal.data(),upper.data(),rhs.data(),numPoints);
 #else
     SU2_MPI::Error("Not compiled with LAPACK support", CURRENT_FUNCTION);
+#endif
+
+#if defined (WM_DEBUG)
+      // Debugging output
+      cout << "AFTER ENERGY SOLVE" << endl;
+      if(Temperature_Prescribed == true){
+	  cout << "Wall Temperature Prescribed = " << Wall_Temperature << endl;
+      }
+      else if(HeatFlux_Prescribed == true){
+	  cout << "Prescribed Heat Flux = " << Wall_HeatFlux << endl;
+      }
+      cout << "y, u, T, mu, muTurb, rho, diagonal, rhs" << endl;
+      for(unsigned short i=0; i<numPoints; i++){
+        cout << y[i] << ", ";
+        cout << u[i] << ", ";
+        cout << T[i] << ", ";
+        cout << mu[i] << ", ";
+        cout << muTurb[i] << ", ";
+        cout << rho[i] << ", ";
+        cout << diagonal[i] << ", ";
+        cout << rhs[i] << ", ";
+        cout << endl;
+      }
 #endif
 
     T = rhs;
@@ -320,40 +408,42 @@ void CWallModel1DEQ::WallShearStressAndHeatFlux(const su2double rhoExchange,
       ViscosityWall = mu[0] + muTurb[0];
       kOverCvWall = c_p / c_v * (mu[0]/Pr_lam + muTurb[0]/Pr_turb);
 #if defined (WM_DEBUG)
-//      // Debugging output
-//      cout << "tauWall = " << tauWall << endl;
-//      cout << "qWall = " << qWall << endl;
-//      cout << "ViscosityWall = " << ViscosityWall << endl;
-//      cout << "kOverCvWall = " << kOverCvWall << endl;
-//      cout << "y, u, T, mu, muTurb, rho" << endl;
-//      for(unsigned short i=0; i<numPoints; i++){
-//        cout << y[i] << ", ";
-//        cout << u[i] << ", ";
-//        cout << T[i] << ", ";
-//        cout << mu[i] << ", ";
-//        cout << muTurb[i] << ", ";
-//        cout << rho[i] << ", ";
-//        cout << endl;
-//      }
+      // Debugging output
+      cout << "tauWall = " << tauWall << endl;
+      cout << "qWall = " << qWall << endl;
+      cout << "ViscosityWall = " << ViscosityWall << endl;
+      cout << "kOverCvWall = " << kOverCvWall << endl;
+      cout << "y, u, T, mu, muTurb, rho" << endl;
+      for(unsigned short i=0; i<numPoints; i++){
+        cout << y[i] << ", ";
+        cout << u[i] << ", ";
+        cout << T[i] << ", ";
+        cout << mu[i] << ", ";
+        cout << muTurb[i] << ", ";
+        cout << rho[i] << ", ";
+        cout << endl;
+      }
 #endif
     }
     else if(j == 50){
       cout << "CWallModel1DEQ::WallShearStressAndHeatFlux: Wall Model did not converge" << endl;
-      //// Debugging output
-      //cout << "tauWall = " << tauWall << endl;
-      //cout << "qWall = " << qWall << endl;
-      //cout << "ViscosityWall = " << ViscosityWall << endl;
-      //cout << "kOverCvWall = " << kOverCvWall << endl;
-      //cout << "y, u, T, mu, muTurb, rho" << endl;
-      //for(unsigned short i=0; i<numPoints; i++){
-      //  cout << y[i] << ", ";
-      //  cout << u[i] << ", ";
-      //  cout << T[i] << ", ";
-      //  cout << mu[i] << ", ";
-      //  cout << muTurb[i] << ", ";
-      //  cout << rho[i] << ", ";
-      //  cout << endl;
-      //}
+#if defined (WM_DEBUG)
+      // Debugging output
+      cout << "tauWall = " << tauWall << endl;
+      cout << "qWall = " << qWall << endl;
+      cout << "ViscosityWall = " << ViscosityWall << endl;
+      cout << "kOverCvWall = " << kOverCvWall << endl;
+      cout << "y, u, T, mu, muTurb, rho" << endl;
+      for(unsigned short i=0; i<numPoints; i++){
+        cout << y[i] << ", ";
+        cout << u[i] << ", ";
+        cout << T[i] << ", ";
+        cout << mu[i] << ", ";
+        cout << muTurb[i] << ", ";
+        cout << rho[i] << ", ";
+        cout << endl;
+      }
+#endif
       SU2_MPI::Error("Did not converge", CURRENT_FUNCTION);
     }
 
